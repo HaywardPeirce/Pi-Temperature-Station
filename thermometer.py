@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import os.path
 import glob
 import time
 from subprocess import *
