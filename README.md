@@ -23,6 +23,8 @@ Follow the TEMPer-python installation instructions
 
 Place the temperature sensing python script in the pi user home directory
 
+Place the Adafruit APIkey in a files in the pi user home directory called apikey.txt
+
 Place the thermoservice.conf file in /etc/init
 
 Reboot the Pi
