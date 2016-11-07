@@ -5,9 +5,14 @@ import glob
 import time
 from subprocess import *
 
+#Read the Adafruit API key in from file /home/pi/apikey.txt.
+file = open('/home/pi/apikey.txt', 'r')
+apikey = file.readline().replace("\n", '')
+file.close()
+
 # Import library and create instance of REST client.
 from Adafruit_IO import Client
-aio = Client('')
+aio = Client(apikey)
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
