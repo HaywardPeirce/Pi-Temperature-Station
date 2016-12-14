@@ -32,11 +32,12 @@ def run_cmd(cmd):
     return output
 
 def get_usb_temp():
-    usbtemp_str= run_cmd("temper-poll | grep 'Device'  | awk '{print $3}' | cut -c 1-3")
-    print('usbtemp_str: ', usbtemp_str)
+    usbtemp_str= run_cmd("temper-poll | grep 'Device'  | awk '{print $3}' | cut -c 1-4")
+    #print('usbtemp_str: ', usbtemp_str)
     if usbtemp_str != "":
-        #usbtemp = float(usbtemp_str)
+        usbtemp = float(usbtemp_str) - 8
         return usbtemp_str
+    else: return False
 
 def read_temp_raw0():
     f = open(device_file0, 'r')
@@ -60,6 +61,7 @@ def read_temp0():
         temp_string = lines[1][equals_pos+2:]
         temp_c = float(temp_string) / 1000.0
         return temp_c
+    else: return False
 
 def read_temp1():
     lines = read_temp_raw1()
@@ -71,20 +73,29 @@ def read_temp1():
         temp_string = lines[1][equals_pos+2:]
         temp_c = float(temp_string) / 1000.0
         return temp_c
+    else: return False
 
 while True:
         temp0 = read_temp0()
         temp1 = read_temp1()
 
         temp2 = get_usb_temp()
+        
+        if temp0 != False:
+            print('Sensor 0 temp:',temp0)
+            aio.send('temperature', temp0)
+            data0 = aio.receive('temperature')
+            print('Received value: {0}'.format(data0.value))
+        if temp1 != False: 
+            print('Sensor 1 temp:',temp1)
+            aio.send('temperature-2', temp1)
+            data1 = aio.receive('temperature-2')
+            print('Received value: {0}'.format(data1.value))
+        if temp2 != False:
+            print('Sensor 2 temp:',temp2)
+            aio.send('temperature-3', temp2)
+            data2 = aio.receive('temperature-3')
+            print('Received value: {0}'.format(data2.value))
+        time.sleep(10)
 
-        print('Sensor 0 temp:',temp0)
-        print('Sensor 1 temp:',temp1)
-        print('Sensor 2 temp:',temp2)
-        aio.send('temperature', temp0)
-        aio.send('temperature-2', temp1)
-        data0 = aio.receive('temperature')
-        print('Received value: {0}'.format(data0.value))
-        data1 = aio.receive('temperature')
-        print('Received value: {0}'.format(data1.value))
-        time.sleep(1)
+
