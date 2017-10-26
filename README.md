@@ -17,14 +17,26 @@ Information on how to create an Upstart Service was found here: https://stackove
 Install Upstart
 `sudo apt-get install upstart`
 
-Follow the Adafruit.io installation instructions
+Follow the [Adafruit.io installation instructions](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20#add-onewire-support):
+- Add `dtoverlay=w1-gpio` to `/boot/config.txt` using `sudo nano /boot/config.txt`
+- Reboot
+- Run the following the check that the temperature device(s) works:
+  
+  `sudo modprobe w1-gpio`
+  
+  `sudo modprobe w1-therm`
+  
+  `cd /sys/bus/w1/devices`
+  
+  `ls`
+  
+  `cd 28-xxxx` (change this to match what serial number pops up)
+  
+  `cat w1_slave`
 
-Follow the TEMPer-python installation instructions
-
-Place the temperature sensing python script in the pi user home directory
-
-Place the Adafruit APIkey in a files in the pi user home directory called apikey.txt
-
-Place the thermoservice.conf file in /etc/init
-
-Reboot the Pi
+- Follow the TEMPer-python installation instructions
+- Place the temperature sensing python script in the pi user home directory
+- Place the Adafruit APIkey in a files in the pi user home directory called apikey.txt
+- Place the thermoservice.conf file in /etc/init
+- Change the permissions for the `thermometer.py` file: `sudo chmod +x thermometer.py`
+- Reboot the Pi
