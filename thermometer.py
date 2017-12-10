@@ -70,20 +70,28 @@ def readTemps(index):
 
 while True:
         
-        tempList = [None, None, None]
-        temps = []
+        checkList = [None, None, None]
+        
+        tempList = []
+        #temps = []
         #data = []
         
-        for index, temp in enumerate(tempList):
-            tempList[index] = readTemps(index)
+        # loop through length of list of devices to check
+        for index, temp in enumerate(checkList):
             
-            if tempList[index] != False:
-                print('Sensor ', index, ' temp: ',tempList[index])
-                temps.append(tempList[index])
-                
-        temp = sum(tempList)/len(tempList)
+            #read in the temp for the entry
+            tempTemp = readTemps(index)
+            
+            #if the temerature was read in (and isn't still null)
+            if tempTemp != False:
+                print('Sensor ', index, ' temp: ',tempTemp)
+                tempList.append(tempTemp)
         
-        aio.send('temperature', '%.3f'%temp)
+        #Find the average of the temperatures that were read in        
+        tempFinal = sum(tempList)/len(tempList)
+        
+        #send the temperature to adafruit
+        aio.send('temperature', '%.3f'%tempFinal)
         value = aio.receive('temperature')
         print('Received value: {0}'.format(value.value))
         
