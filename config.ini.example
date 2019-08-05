@@ -1,0 +1,10 @@
+[GENERAL]
+Delay = 30
+Output = False
+
+[INFLUXDB]
+Address =
+Port = 8086
+Database =
+Username =
+Password =
