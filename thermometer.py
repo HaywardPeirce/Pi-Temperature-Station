@@ -88,6 +88,30 @@ def readTemps(index):
     
     return temp
 
+def sendInfluxData(json_data):
+
+    if output:
+        #print(json_data)
+        print(type(json_data))
+
+    try:
+        influx_client.write_points(json_data)
+    except (InfluxDBClientError, ConnectionError, InfluxDBServerError) as e:
+        if hasattr(e, 'code') and e.code == 404:
+
+            print('Database {} Does Not Exist.  Attempting To Create'.format(influxDatabase))
+
+            influx_client.create_database(influxDatabase)
+            influx_client.write_points(json_data)
+
+            return
+
+        print('ERROR: Failed To Write To InfluxDB')
+        print(e)
+
+    if output:
+        print('Written To Influx: {}'.format(json_data))
+
 def main():
         
     checkList = [None, None, None]
