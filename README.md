@@ -35,8 +35,8 @@ Follow the [Adafruit.io installation instructions](https://learn.adafruit.com/ad
   `cat w1_slave`
 
 - Follow the TEMPer-python installation instructions
-- Place the temperature sensing python script in the pi user home directory
-- Place the Adafruit APIkey in a files in the pi user home directory called apikey.txt
+- Close this repo into the pi user home directory
+- Install the required python libraries: `pip install -r requirements.txt`
 - Place the thermoservice.conf file in /etc/init
 - Change the permissions for the `thermometer.py` file: `sudo chmod +x thermometer.py`
 - Reboot the Pi

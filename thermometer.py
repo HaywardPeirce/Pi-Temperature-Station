@@ -26,15 +26,6 @@ influxPassword = config['INFLUXDB'].get('Password', fallback='')
 
 influx_client = InfluxDBClient(influxAddress, influxPort, influxUser, influxPassword, influxDatabase)
 
-#Read the Adafruit API key in from file /home/pi/apikey.txt.
-# file = open('/home/pi/apikey.txt', 'r')
-# apikey = file.readline().replace("\n", '')
-# file.close()
-
-# # Import library and create instance of REST client.
-# from Adafruit_IO import Client
-# aio = Client(apikey)
-
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
@@ -113,51 +104,47 @@ def sendInfluxData(json_data):
         print('Written To Influx: {}'.format(json_data))
 
 def main():
+
+    while True:   
+        checkList = [None, None, None]
         
-    checkList = [None, None, None]
-    
-    tempList = []
-    #temps = []
-    #data = []
-    
-    # loop through length of list of devices to check
-    for index, temp in enumerate(checkList):
+        tempList = []
+        #temps = []
+        #data = []
         
-        #read in the temp for the entry
-        tempTemp = readTemps(index)
+        # loop through length of list of devices to check
+        for index, temp in enumerate(checkList):
+            
+            #read in the temp for the entry
+            tempTemp = readTemps(index)
+            
+            #if the temerature was read in (and isn't still null)
+            if tempTemp != False:
+                print('Sensor ', index, ' temp: ',tempTemp)
+                tempList.append(tempTemp)
         
-        #if the temerature was read in (and isn't still null)
-        if tempTemp != False:
-            print('Sensor ', index, ' temp: ',tempTemp)
-            tempList.append(tempTemp)
-    
-    #Find the average of the temperatures that were read in        
-    tempFinal = sum(tempList)/len(tempList)
+        #Find the average of the temperatures that were read in        
+        tempFinal = sum(tempList)/len(tempList)
 
-    # Round `finalTemp` to three decimal places, and retain it as a float
-    tempFinal = float('%.3f'%(tempFinal))
-    
-    #send the temperature to adafruit
-    # aio.send('temperature', '%.3f'%tempFinal)
-    # value = aio.receive('temperature')
-    # print('Received value: {0}'.format(value.value))
-    
-    #only send the data if there is non-null data to send
-    if tempFinal is not None:
+        # Round `finalTemp` to three decimal places, and retain it as a float
+        tempFinal = float('%.3f'%(tempFinal))
+        
+        #only send the data if there is non-null data to send
+        if tempFinal is not None:
 
-        json_body = [{
-            "measurement": "housetemps",
-            "tags": {
-                "location": "livingroom"
-            },
-            "fields": {
-                "temperature": tempFinal
-            }
-        }]
+            json_body = [{
+                "measurement": "housetemps",
+                "tags": {
+                    "location": "livingroom"
+                },
+                "fields": {
+                    "temperature": tempFinal
+                }
+            }]
 
-        sendInfluxData(json_body)
+            sendInfluxData(json_body)
 
-    time.sleep(delay)
+        time.sleep(delay)
 
 if __name__ == '__main__':
     main()
