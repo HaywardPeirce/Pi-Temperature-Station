@@ -145,8 +145,7 @@ def main():
     #only send the data if there is non-null data to send
     if tempFinal is not None:
 
-        json_body = [
-        {
+        json_body = [{
             "measurement": "housetemps",
             "tags": {
                 "location": "livingroom"
@@ -154,9 +153,9 @@ def main():
             "fields": {
                 "temperature": tempFinal
             }
-        }
+        }]
 
-        sendInfluxData(tempFinal)
+        sendInfluxData(json_body)
 
     time.sleep(delay)
 
