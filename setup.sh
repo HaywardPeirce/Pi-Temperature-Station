@@ -1,4 +1,4 @@
-sudo apt-get install git python-usb python-setuptools -y
+sudo apt-get install git pip python python-usb python-setuptools -y
 
 sudo echo 'dtoverlay=w1-gpio' >> /boot/config.txt
 
@@ -13,6 +13,9 @@ sudo echo 'usbhid.quirks=0x0c45:0x7401:0x4' >> /boot/cmdline.txt
 
 cd /home/pi/Pi-Temperature-Station/
 
+sudo pip install virtualenv
+virtualenv -p /usr/bin/python2.7 venv
+source venv/bin/activate
 sudo pip install -r requirements.txt
 
 sudo chmod +x thermometer.py
