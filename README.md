@@ -8,29 +8,14 @@ The basic code for the temperature sensing python script was found here: https:/
 
 The drivers for the TEMPer sensor were found here: https://github.com/padelt/temper-python
 
+[Adafruit.io installation instructions for ds18b20 temperature sensing](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20#add-onewire-support)
+
 ### Installation
 
 Clone this repo into the Pi home directory
 
-Follow the [Adafruit.io installation instructions](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20#add-onewire-support):
-- Add `dtoverlay=w1-gpio` to `/boot/config.txt` using `sudo nano /boot/config.txt`
-- Reboot
-- Run the following the check that the temperature device(s) works:
-  
-  `sudo modprobe w1-gpio`
-  
-  `sudo modprobe w1-therm`
-  
-  `cd /sys/bus/w1/devices`
-  
-  `ls`
-  
-  `cd 28-xxxx` (change this to match what serial number pops up)
-  
-  `cat w1_slave`
+Run `sudo bash setup.sh`
 
-- Follow the [TEMPer-python](https://github.com/padelt/temper-python) installation instructions
-- Install the required python libraries: `pip install -r requirements.txt`
-- Place the thermoservice.service file in /etc/systemd/system
-- Change the permissions for the `thermometer.py` file: `sudo chmod +x thermometer.py`
-- Reboot the Pi
+Edit the `config.ini` file to indicate the IP address of the influxdb server, the port, and which database you wish to have the data added to
+
+Reboot
